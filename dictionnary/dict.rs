@@ -56,13 +56,16 @@ pub mod dict {
     }
 }
 
+use std::io::{BufRead, BufReader};
+use std::fs::File;
+
 fn main() {
     let mut dict = dict::Dict::default();
-    dict.record("Hello");
-    dict.record("Hulk");
-    dict.record("Hat-trick");
-    dict.record("World");
-    dict.record("Wonderful");
-    dict.record("Rust");
-    dict.print();
+    let reader = BufReader::new(File::open("dict.txt").expect("Cannot open dict.txt"));
+
+    for line in reader.lines() {
+        dict.record(&line.unwrap());
+    }
+
+    // dict.print();
 }

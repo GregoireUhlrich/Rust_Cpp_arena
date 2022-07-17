@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <string>
 
@@ -33,6 +34,7 @@ public:
     {
         std::cout << "Dictionnary content:\n";
         print_node(root, "");
+        std::cout.flush();
     }
 
 private:
@@ -41,7 +43,7 @@ private:
     void print_node(Node const &node, std::string str)
     {
         if (node.is_terminal) {
-            std::cout << "  --> " << str << std::endl;
+            std::cout << "  --> " << str << '\n';
         }
         for (const auto &[ch, next] : node.children) {
             print_node(next, str + ch);
@@ -55,11 +57,16 @@ private:
 int main() {
 
     Dict dict;
-    dict.record("Hello");
-    dict.record("Hulk");
-    dict.record("Hat-trick");
-    dict.record("World");
-    dict.record("Wonderful");
-    dict.record("Rust");
-    dict.print();
+    std::ifstream in("dict.txt");
+    if (!in) {
+        std::cerr << "File \"dict.txt\" is invalid!" << std::endl;
+        return 1;
+    }
+    std::string buffer;
+    while (!in.eof()) {
+        in >> buffer;
+        dict.record(buffer);
+    }
+    //dict.print();
+    return 0;
 }
