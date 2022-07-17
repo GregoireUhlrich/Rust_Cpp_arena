@@ -53,14 +53,14 @@ def benchmark(dir: str, n_iter: int):
     for cfile in cpp:
         print(f'C++ benchmark for {cfile}')
         compile_cmd = (
-            f'g++ -std=c++17 -Wall -Wextra -Wpedantic {cfile} -o a.out'
+            f'g++ -std=c++17 -Wall -Wextra -Wpedantic -O3 {cfile} -o a.out'
         )
         _benchmark(txt, md, dir, cfile, compile_cmd, n_iter)
 
     for rfile in rust:
         print(f'Rust benchmark for {rfile}')
         compile_cmd = (
-            f'rustc -C prefer-dynamic {rfile} -o a.out'
+            f'rustc -C prefer-dynamic -C opt-level=3 {rfile} -o a.out'
         )
         _benchmark(txt, md, dir, rfile, compile_cmd, n_iter)
 

@@ -44,7 +44,7 @@ pub mod dict {
             for (ch, next) in &node.children {
                 let mut str_cpy = str.clone();
                 str_cpy.push(*ch);
-                Dict::print_node(next, str_cpy);
+                Dict::print_node(&next, str_cpy);
             }
         }
 
