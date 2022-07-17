@@ -28,8 +28,8 @@ def _benchmark(txt, md, dir: str, file: str, compile_cmd: str, n_iter: int):
 
     md.write(f'| {file.ljust(15)} | {(end_c - start_c)*1e-6/n_iter} | '
              f'{size/1000.} | {(end_r - start_r)*1e-6/n_iter} |\n')
-    txt.write(f'{file.ljust(15)}\t{(end_c - start_c)*1e-6/n_iter}\t'
-              f'{size/1000.}\t{(end_r - start_r)*1e-6/n_iter}\n')
+    txt.write(f'{file.ljust(15)}\t{int((end_c - start_c)*1e-6/n_iter)}\t'
+              f'{int(size/1000.)}\t{int((end_r - start_r)*1e-6/n_iter)}\n')
 
 
 def benchmark(dir: str, n_iter: int):
@@ -47,7 +47,7 @@ def benchmark(dir: str, n_iter: int):
     md = open(os.path.join(dir, "benchmark.md"), "w")
     txt.write(f'{n_iter} Iterations:\tBuild (ms)'
               '\tSize (kB)\tRun (ms)\n')
-    md.write(f'| {n_iter} Iterations: | Build (ms)'
+    md.write(f'| {n_iter} Iterations | Build (ms)'
              ' | Size (kB) | Run (ms) |\n')
     md.write('|-----------------------|----------|--------|--------|\n')
     for cfile in cpp:
