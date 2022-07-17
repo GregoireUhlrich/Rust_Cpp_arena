@@ -49,7 +49,7 @@ def benchmark(dir: str, n_iter: int):
               '\tSize (kB)\tRun (ms)\n')
     md.write(f'| {n_iter} Iterations: | Build (ms)'
              ' | Size (kB) | Run (ms) |\n')
-    md.write('------------------------------------------------------\n')
+    md.write('|-----------------------|----------|--------|--------|\n')
     for cfile in cpp:
         print(f'C++ benchmark for {cfile}')
         compile_cmd = (
