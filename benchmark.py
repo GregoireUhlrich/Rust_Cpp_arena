@@ -26,10 +26,10 @@ def _benchmark(txt, md, dir: str, file: str, compile_cmd: str, n_iter: int):
     os.system(run_cmd)
     end_r = perf_counter_ns()
 
-    md.write(f'| {file.ljust(15)} | {(end_c - start_c)*1e-6/n_iter} | '
-             f'{size/1000.} | {(end_r - start_r)*1e-6/n_iter} |\n')
-    txt.write(f'{file.ljust(15)}\t{int((end_c - start_c)*1e-6/n_iter)}\t'
-              f'{int(size/1000.)}\t{int((end_r - start_r)*1e-6/n_iter)}\n')
+    md.write(f'| {file.ljust(15)} | {int((end_c - start_c)*1e-6/n_iter)} | '
+             f'{int(size/1000.)} | {int((end_r - start_r)*1e-6/n_iter)} |\n')
+    txt.write(f'{file.ljust(15)}\t{(end_c - start_c)*1e-6/n_iter}\t'
+              f'{size/1000.}\t{(end_r - start_r)*1e-6/n_iter}\n')
 
 
 def benchmark(dir: str, n_iter: int):
