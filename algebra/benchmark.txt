@@ -1,0 +1,3 @@
+10 Iterations:	Build (ms)	Size (kB)	Run (ms)
+algebra.cpp    	1426.7402602999998	42.92	93.84055199999999
+algebra.rs     	1090.0576305	48.688	56.7558213

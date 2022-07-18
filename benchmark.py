@@ -19,6 +19,8 @@ def _benchmark(txt, md, dir: str, file: str, compile_cmd: str, n_iter: int):
 
     size = os.path.getsize(os.path.join(dir, 'a.out'))
 
+    if not os.path.isfile(os.path.join(dir, "a.out")):
+        raise IOError("a.out not generated")
     run_cmd = "./a.out"
     run_cmd = f"cd {dir}; " + bash_iteration(run_cmd, n_iter)
 
