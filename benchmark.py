@@ -4,7 +4,6 @@ import os
 import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 from dataclasses import dataclass
 
 
@@ -49,7 +48,7 @@ def run_cmd(cmd):
 
 def rust_build():
     cmd = (
-        "cd rust; rm -r target; cargo build -r"
+        "cd rust; rm -r target; cargo rustc --release -- -Cprefer-dynamic"
     )
     run_cmd(cmd)
 
@@ -113,44 +112,69 @@ def plot_benchmarks(benchmarks):
         for data in benchmarks
         for el in [data["cpp"].runtime, data["rust"].runtime]
     ]
-    tick_labels = [
+    s = [
+        el
+        for data in benchmarks
+        for el in [data["cpp"].size, data["rust"].size]
+    ]
+    labels = [
         data["name"]
         for data in benchmarks
-    ]
-    delta = 0.1
-    pos = np.arange(len(tick_labels))
-    eff_pos = [
-        el
-        for p in pos
-        for el in [p-delta, p+delta]
     ]
     cpp_color = "steelblue"
     rust_color = "forestgreen"
     median_color = "red"
-    fig, ax = plt.subplots()
-    plt.boxplot(
-        x[::2], positions=eff_pos[::2],
-        patch_artist=True,
-        boxprops=dict(facecolor=cpp_color, color=cpp_color),
-        medianprops=dict(color=median_color)
-        )
-    plt.boxplot(
-        x[1::2], positions=eff_pos[1::2],
-        patch_artist=True,
-        boxprops=dict(facecolor=rust_color, color=rust_color),
-        medianprops=dict(color=median_color)
-        )
+    title_size = 15
+    label_size = 13
+    ticks_size = 11
+    n_plots = int(len(x) / 2)
+    plot_sizes = False
+    fig, axes = plt.subplots(1 + plot_sizes, n_plots,
+                             figsize=(3*n_plots, 3.5*(1+plot_sizes)))
+    for i in range(n_plots):
+        ax = axes[0][i] if plot_sizes else axes[i]
+        ax.set_title(r'$\mathrm{' + labels[i] + '}$', fontsize=title_size)
+        ax.boxplot(
+            [x[2*i]], positions=[-1],
+            patch_artist=True,
+            boxprops=dict(facecolor=cpp_color, color=cpp_color),
+            medianprops=dict(color=median_color),
+            widths=[0.75]
+            )
+        ax.boxplot(
+            [x[2*i+1]], positions=[1],
+            patch_artist=True,
+            boxprops=dict(facecolor=rust_color, color=rust_color),
+            medianprops=dict(color=median_color),
+            widths=[0.75]
+            )
 
-    ax.set_xticks(pos)
-    ax.set_xticklabels(tick_labels, fontsize=15)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.ylabel(r'Time $[\mathrm{ms}]$', fontsize=15)
-    plt.yscale('log')
-
-    cpp_patch = mpatches.Patch(color=cpp_color, label='C++')
-    rust_patch = mpatches.Patch(color=rust_color, label='Rust')
-    ax.legend(handles=[cpp_patch, rust_patch], fontsize=15)
+        ax.set_xticks([])
+        ax.tick_params(axis='y', which='major', labelsize=ticks_size)
+        ax.tick_params(axis='y', which='minor', labelsize=ticks_size)
+        if i == 0:
+            ax.set_ylabel(r'Runtime $[\mathrm{ms}]$', fontsize=label_size)
+        if not plot_sizes:
+            ax.set_xticks([-1, 1])
+            ax.set_xticklabels(["cpp", "rust"], fontsize=label_size)
+            ax.tick_params(axis='x', which='major', labelsize=label_size)
+            ax.tick_params(axis='x', which='minor', labelsize=label_size)
+        else:
+            ax2 = axes[1][i]
+            ax2.bar(-1, height=s[2*i]/1024, width=0.75,
+                    color=cpp_color, label='C++')
+            ax2.bar(+1, height=s[2*i+1]/1024, width=0.75,
+                    color=rust_color, label='Rust')
+            ax.set_xticks([-1, 1])
+            ax.set_xticklabels(["cpp", "rust"], fontsize=label_size)
+            ax.tick_params(axis='x', which='major', labelsize=label_size)
+            ax.tick_params(axis='x', which='minor', labelsize=label_size)
+            ax2.tick_params(axis='y', which='major', labelsize=ticks_size)
+            ax2.tick_params(axis='y', which='minor', labelsize=ticks_size)
+            if i == 0:
+                ax2.set_ylabel(
+                    r'Executable size $[\mathrm{kB}]$',
+                    fontsize=label_size)
 
     plt.show()
 
