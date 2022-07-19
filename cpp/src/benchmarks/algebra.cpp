@@ -1,5 +1,6 @@
 #include "algebra.h"
 #include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <memory>
 #include <optional>
@@ -131,8 +132,6 @@ Expr sum(std::vector<Expr> args)
 
 void benchmark_algebra()
 {
-    static int counter = 0;
-
     Expr a  = number(3);
     Expr b  = number(4);
     Expr x  = symbol("x");
@@ -141,16 +140,16 @@ void benchmark_algebra()
     Expr s2 = sum({a, y});
     s1      = replace(s1, a, b);
     s1      = replace(s1, x, y);
-    counter += a->is_equal(b);
-    counter += x->is_equal(y);
-    counter += s1->is_equal(s2);
+    assert(!a->is_equal(b));
+    assert(!x->is_equal(y));
+    assert(!s1->is_equal(s2));
 
     Expr big_sum1 = sum(std::vector<Expr>(1000, x));
     Expr big_sum2 = sum(std::vector<Expr>(1000, big_sum1));
     Expr big_sum3 = sum(std::vector<Expr>(1000, a));
     Expr big_sum4 = sum(std::vector<Expr>(1000, big_sum3));
     big_sum2      = replace(replace(big_sum2, x, y), y, a);
-    counter += s1->is_equal(s2) && big_sum2->is_equal(big_sum4);
+    assert(big_sum2->is_equal(big_sum4));
 }
 
 } // namespace bch

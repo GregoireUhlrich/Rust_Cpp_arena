@@ -9,6 +9,9 @@ namespace bch {
 
 struct Node {
 
+    bool contains(std::string_view::const_iterator first,
+                  std::string_view::const_iterator last);
+
     void record(std::string_view::const_iterator first,
                 std::string_view::const_iterator last);
 
@@ -22,6 +25,8 @@ class Dict {
     void record(std::string_view str);
 
     void print();
+
+    bool contains(std::string_view word);
 
   private:
     static void print_node(Node const &node, std::string str);

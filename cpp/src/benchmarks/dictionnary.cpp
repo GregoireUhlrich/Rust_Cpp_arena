@@ -1,5 +1,6 @@
 #include "dictionnary.h"
 #include "tools/error.h"
+#include <cassert>
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -7,6 +8,18 @@
 #include <string_view>
 
 namespace bch {
+
+bool Node::contains(std::string_view::const_iterator first,
+                    std::string_view::const_iterator last)
+{
+    if (first == last)
+        return is_terminal;
+    auto pos = children.find(*first);
+    if (pos == children.end()) {
+        return false;
+    }
+    return pos->second.contains(first + 1, last);
+}
 
 void Node::record(std::string_view::const_iterator first,
                   std::string_view::const_iterator last)
@@ -18,9 +31,15 @@ void Node::record(std::string_view::const_iterator first,
     Node &next = children[*first];
     next.record(first + 1, last);
 }
+
 void Dict::record(std::string_view str)
 {
     root.record(str.begin(), str.end());
+}
+
+bool Dict::contains(std::string_view word)
+{
+    return root.contains(word.begin(), word.end());
 }
 
 void Dict::print()
@@ -52,6 +71,8 @@ void benchmark_dictionnary()
         in >> buffer;
         dict.record(buffer);
     }
+    assert(dict.contains("black-hole"));
+    assert(!dict.contains("white-hole"));
 }
 
 } // namespace bch

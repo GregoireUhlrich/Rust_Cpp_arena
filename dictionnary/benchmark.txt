@@ -1,3 +1,0 @@
-10 Iterations:	Build (ms)	Size (kB)	Run (ms)
-dict.cpp       	580.0798661	22.736	243.6554892
-dict.rs        	661.4346916	41.008	398.61188419999996
