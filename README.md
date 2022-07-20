@@ -16,7 +16,7 @@ This will launch the pre-defined benchmarks and plot the results.
 
 You should implement the benchmark, including the main benchmark function (should take no parameter and return nothing) in `src/benchmarks/` both in the `cpp` and `rust` projects.
 
-Then, modify the `tools/config.rs` and `tools/config.cpp` files to add the benchmark function, choosing one particular name. This gives for the `rust` configuration:
+Then, modify the `src/tools/config.rs` and `src/tools/config.cpp` files to add the benchmark function in the `rust` and `cpp` projects respectively, by choosing one particular name. This gives for the `rust` configuration:
 ``` rust
     benchmarks: HashMap::from([
         ...,
