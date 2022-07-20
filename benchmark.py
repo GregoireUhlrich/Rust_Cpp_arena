@@ -142,11 +142,11 @@ def plot_benchmarks(benchmarks):
     label_size = 13
     ticks_size = 11
     n_plots = int(len(x) / 2)
-    plot_sizes = False
-    fig, axes = plt.subplots(1 + plot_sizes, n_plots,
-                             figsize=(3*n_plots, 3.5*(1+plot_sizes)))
+    row_size = int(np.ceil(n_plots / 2))
+    fig, axes = plt.subplots(2, row_size,
+                             figsize=(1.5*n_plots, 7))
     for i in range(n_plots):
-        ax = axes[0][i] if plot_sizes else axes[i]
+        ax = axes[int(i / row_size)][i % row_size]
         ax.set_title(r'$\mathrm{' + labels[i] + '}$', fontsize=title_size)
         ax.boxplot(
             [x[2*i]], positions=[-1],
@@ -166,29 +166,12 @@ def plot_benchmarks(benchmarks):
         ax.set_xticks([])
         ax.tick_params(axis='y', which='major', labelsize=ticks_size)
         ax.tick_params(axis='y', which='minor', labelsize=ticks_size)
-        if i == 0:
+        if i % row_size == 0:
             ax.set_ylabel(r'Runtime $[\mathrm{ms}]$', fontsize=label_size)
-        if not plot_sizes:
-            ax.set_xticks([-1, 1])
-            ax.set_xticklabels(["cpp", "rust"], fontsize=label_size)
-            ax.tick_params(axis='x', which='major', labelsize=label_size)
-            ax.tick_params(axis='x', which='minor', labelsize=label_size)
-        else:
-            ax2 = axes[1][i]
-            ax2.bar(-1, height=s[2*i]/1024, width=0.75,
-                    color=cpp_color, label='C++')
-            ax2.bar(+1, height=s[2*i+1]/1024, width=0.75,
-                    color=rust_color, label='Rust')
-            ax.set_xticks([-1, 1])
-            ax.set_xticklabels(["cpp", "rust"], fontsize=label_size)
-            ax.tick_params(axis='x', which='major', labelsize=label_size)
-            ax.tick_params(axis='x', which='minor', labelsize=label_size)
-            ax2.tick_params(axis='y', which='major', labelsize=ticks_size)
-            ax2.tick_params(axis='y', which='minor', labelsize=ticks_size)
-            if i == 0:
-                ax2.set_ylabel(
-                    r'Executable size $[\mathrm{kB}]$',
-                    fontsize=label_size)
+        ax.set_xticks([-1, 1])
+        ax.set_xticklabels(["cpp", "rust"], fontsize=label_size)
+        ax.tick_params(axis='x', which='major', labelsize=label_size)
+        ax.tick_params(axis='x', which='minor', labelsize=label_size)
 
     plt.show()
 

@@ -9,6 +9,9 @@ Playground to learn Rust and compare several features with C++. The correspondin
 ```
 This will launch the pre-defined benchmarks and plot the results.
 
+### Example of benchmark results
+![](assets/example.png)
+
 ## Add new benchmarks
 
 You should implement the benchmark, including the main benchmark function (should take no parameter and return nothing) in `src/benchmarks/` both in the `cpp` and `rust` projects.
