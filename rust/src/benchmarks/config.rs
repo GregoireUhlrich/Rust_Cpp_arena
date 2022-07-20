@@ -2,6 +2,8 @@ use super::dictionnary::benchmark_dictionnary;
 use super::algebra::benchmark_algebra;
 use super::vector::{benchmark_vector1, benchmark_vector2, benchmark_vector3};
 use super::array::benchmark_array;
+use super::threads::benchmark_threads;
+use super::algorithm::benchmark_algorithm;
 use std::collections::HashMap;
 
 type BenchmarkFunc = dyn Fn() -> ();
@@ -22,6 +24,8 @@ impl Default for Config {
                 ("vector2", &benchmark_vector2 as &dyn Fn() -> ()),
                 ("vector3", &benchmark_vector3 as &dyn Fn() -> ()),
                 ("array", &benchmark_array as &dyn Fn() -> ()),
+                ("threads", &benchmark_threads as &dyn Fn() -> ()),
+                ("algorithm", &benchmark_algorithm as &dyn Fn() -> ()),
             ])
         }
     }

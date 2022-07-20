@@ -17,6 +17,8 @@ BENCHMARKS = [
     ("vector2", "vec2.txt", N_ITER),
     ("vector3", "vec3.txt", N_ITER),
     ("array", "array.txt", N_ITER),
+    ("threads", "thread.txt", N_ITER),
+    ("algorithm", "algo.txt", N_ITER),
 ]
 
 

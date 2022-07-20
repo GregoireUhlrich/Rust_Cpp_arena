@@ -9,6 +9,11 @@ set(BENCHMARK_SRC
     vector.cpp
     array.h
     array.cpp
+    threads.h
+    threads.cpp
+    algorithm.h
+    algorithm.cpp
 )
 
 add_library(benchmark-obj OBJECT ${BENCHMARK_SRC})
+target_link_libraries(benchmark-obj pthread)
