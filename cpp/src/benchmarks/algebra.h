@@ -57,7 +57,7 @@ class Number : public BaseExpr {
 
     bool is_equal(Expr const &other) const override;
 
-  private:
+  public:
     int val;
 };
 
@@ -73,7 +73,7 @@ class Symbol : public BaseExpr {
     std::optional<Expr> replace(Expr const &before,
                                 Expr const &after) const override;
 
-  private:
+  public:
     std::string name;
 };
 
@@ -89,13 +89,15 @@ class Sum : public BaseExpr {
     std::optional<Expr> replace(Expr const &before,
                                 Expr const &after) const override;
 
-  private:
+  public:
     std::vector<Expr> args;
 };
 
 Expr sum(std::vector<Expr> args);
 Expr symbol(std::string name);
 Expr number(int val);
+
+Expr add(Expr const &a, Expr const &b);
 
 void benchmark_algebra();
 

@@ -12,7 +12,11 @@ N_ITER = 10
 
 BENCHMARKS = [
     ("dictionnary", "dict.txt", N_ITER),
-    ("algebra", "algebra.txt", N_ITER)
+    ("algebra", "algebra.txt", N_ITER),
+    ("vector1", "vec1.txt", N_ITER),
+    ("vector2", "vec2.txt", N_ITER),
+    ("vector3", "vec3.txt", N_ITER),
+    ("array", "array.txt", N_ITER),
 ]
 
 

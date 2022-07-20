@@ -33,7 +33,7 @@ fn get_benchmark_func<'a>(config: &'a Config, name: &'a str) -> &'a dyn Fn()->()
     }
 }
 
-fn write_to_file(res: &Vec<u128>, filename: &str) -> ()
+fn write_to_file(res: &Vec<f32>, filename: &str) -> ()
 {
     let mut path = get_results_path();
     path.push(filename);
@@ -48,6 +48,6 @@ fn main() {
     let config = Config::default();
     let (benchmark_name, res_name, n_iter) = parse_arguments();
     let benchmark_func = get_benchmark_func(&config, &benchmark_name);
-    let res :Vec<u128> = benchmark_multiple(&benchmark_func, n_iter);
+    let res :Vec<f32> = benchmark_multiple(&benchmark_func, n_iter);
     write_to_file(&res, &res_name);
 }

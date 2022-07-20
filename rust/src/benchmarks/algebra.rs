@@ -179,6 +179,31 @@ pub fn replace(expr: &Expr, old: &Expr, new: &Expr) -> Expr
     }
 }
 
+pub fn add(a: &Expr, b: &Expr) -> Expr
+{
+    let new_args = match (a.as_sum(), b.as_sum()) {
+        (Some(x), Some(y)) => {
+            let mut new_args = x.args.clone();
+            new_args.append(&mut y.args.clone());
+            new_args
+        },
+        (Some(x), None) => {
+            let mut new_args = x.args.clone();
+            new_args.push(b.clone());
+            new_args
+        },
+        (None, Some(y)) => {
+            let mut new_args = y.args.clone();
+            new_args.push(a.clone());
+            new_args
+        },
+        (None, None) => {
+            vec![a.clone(), b.clone()]
+        }
+    };
+    sum(new_args)
+}
+
 pub fn benchmark_algebra() {
 
     let a = number(3);
@@ -193,10 +218,14 @@ pub fn benchmark_algebra() {
     assert!(!x.is_equal(&y));
     assert!(!s1.is_equal(&s2));
 
-    let big_sum1 = sum(vec![x.clone(); 1000]);
-    let mut big_sum2 = sum(vec![big_sum1.clone(); 1000]);
-    let big_sum3 = sum(vec![a.clone(); 1000]);
-    let big_sum4 = sum(vec![big_sum3.clone(); 1000]);
-    big_sum2 = replace(&replace(&big_sum2, &x, &y), &y, &a);
-    assert!(big_sum2.is_equal(&big_sum4));
+    let mut big_sum1 = number(0);
+    for _i in 0..10000 {
+        big_sum1 = add(&big_sum1, &a);
+    }
+    let mut big_sum2 = number(0);
+    for _i in 0..10000 {
+        big_sum2 = add(&big_sum2, &y);
+    }
+    big_sum2 = replace(&replace(&big_sum2, &y, &x), &x, &a);
+    assert!(big_sum2.is_equal(&big_sum1));
 }

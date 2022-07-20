@@ -130,6 +130,30 @@ Expr sum(std::vector<Expr> args)
     return std::make_shared<const Sum>(std::move(args));
 }
 
+Expr add(Expr const &a, Expr const &b)
+{
+    OptExpr<Sum>      a_sum = a->as<Sum>();
+    OptExpr<Sum>      b_sum = b->as<Sum>();
+    std::vector<Expr> new_args;
+    if (a_sum && b_sum) {
+        new_args = a_sum->args;
+        new_args.insert(
+            new_args.end(), b_sum->args.begin(), b_sum->args.end());
+    }
+    else if (a_sum) {
+        new_args = a_sum->args;
+        new_args.push_back(b);
+    }
+    else if (b_sum) {
+        new_args = b_sum->args;
+        new_args.push_back(a);
+    }
+    else {
+        new_args = {a, b};
+    }
+    return sum(std::move(new_args));
+}
+
 void benchmark_algebra()
 {
     Expr a  = number(3);
@@ -144,12 +168,16 @@ void benchmark_algebra()
     assert(!x->is_equal(y));
     assert(!s1->is_equal(s2));
 
-    Expr big_sum1 = sum(std::vector<Expr>(1000, x));
-    Expr big_sum2 = sum(std::vector<Expr>(1000, big_sum1));
-    Expr big_sum3 = sum(std::vector<Expr>(1000, a));
-    Expr big_sum4 = sum(std::vector<Expr>(1000, big_sum3));
-    big_sum2      = replace(replace(big_sum2, x, y), y, a);
-    assert(big_sum2->is_equal(big_sum4));
+    Expr big_sum1 = number(0);
+    for (int i = 0; i != 10000; ++i) {
+        big_sum1 = add(big_sum1, a);
+    }
+    Expr big_sum2 = number(0);
+    for (int i = 0; i != 10000; ++i) {
+        big_sum2 = add(big_sum2, y);
+    }
+    big_sum2 = replace(replace(big_sum2, y, x), x, a);
+    assert(big_sum2->is_equal(big_sum1));
 }
 
 } // namespace bch

@@ -9,11 +9,10 @@ namespace bch {
 class Timer {
   public:
     using clock_t      = std::chrono::high_resolution_clock;
-    using resolution_t = std::chrono::milliseconds;
     using time_point_t = clock_t::time_point;
     using duration_t   = clock_t::duration;
 
-    using time_t = decltype(std::declval<duration_t &>().count());
+    using time_t = float;
 
     Timer()
     {
@@ -25,10 +24,13 @@ class Timer {
         _start = this->now();
     }
 
-    time_t get_duration_ms() const
+    float get_duration_ms() const
     {
         auto now = this->now();
-        return std::chrono::duration_cast<resolution_t>(now - _start).count();
+        return std::chrono::duration_cast<std::chrono::nanoseconds>(now
+                                                                    - _start)
+                   .count()
+               / 1e6;
     }
 
   protected:

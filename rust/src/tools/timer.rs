@@ -11,8 +11,8 @@ impl Default for Timer {
 }
 impl Timer {
 
-    pub fn get_duration_ms(&self) -> u128 {
+    pub fn get_duration_ms(&self) -> f32 {
         let now = Instant::now();
-        return (now - self.start).as_millis();
+        return (now - self.start).as_nanos() as f32 / 1e6;
     }
 }
