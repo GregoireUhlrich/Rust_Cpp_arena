@@ -16,7 +16,20 @@ This will launch the pre-defined benchmarks and plot the results.
 
 You should implement the benchmark, including the main benchmark function (should take no parameter and return nothing) in `src/benchmarks/` both in the `cpp` and `rust` projects.
 
-Then, modify the `tools/config.rs` and `tools/config.cpp` files to add the benchmark function, choosng one particular name.
+Then, modify the `tools/config.rs` and `tools/config.cpp` files to add the benchmark function, choosing one particular name. This gives for the `rust` configuration:
+``` rust
+    benchmarks: HashMap::from([
+        ...,
+        ("benchmark_name", &benchmark_rust_func as &dyn Fn() -> ()),
+    ])
+```
+And the `cpp` counter-part:
+``` cpp
+    std::unordered_map<std::string, std::function<void()>> benchmarks = {
+        ...,
+        {"benchmark_name", benchmark_cpp_func},
+    };
+```
 
 Finally, add the benchmark in the `BENCHMARKS` variable of the `benchmark.py` file adding in the list a tuple:
 ``` python
