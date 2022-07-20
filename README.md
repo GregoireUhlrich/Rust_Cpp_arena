@@ -31,11 +31,11 @@ And the `cpp` counter-part:
     };
 ```
 
-Finally, add the benchmark in the `BENCHMARKS` variable of the `benchmark.py` file adding in the list a tuple:
+Finally, add the benchmark in the `BENCHMARKS` variable of the `benchmark.py` file, completing the list a tuple:
 ``` python
     BENCHMARKS = [
         ...,
         ("benchmark_name", "benchmark_output_file_name", <n_iter(int)>)
     ]
 ```
-with `n_iter` the number of iterations to repeat the becnhmark.
+with `n_iter` the number of iterations to repeat the benchmark.
