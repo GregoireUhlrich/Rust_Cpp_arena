@@ -36,6 +36,10 @@ def msg(str):
     return f"{bcolors.OKBLUE}{bcolors.BOLD}{str}{bcolors.ENDC}"
 
 
+def resmsg(str):
+    return f"    --> {bcolors.OKCYAN}{str}{bcolors.ENDC}\n"
+
+
 def item(str):
     return f"  {bcolors.OKGREEN}- {str}{bcolors.ENDC}"
 
@@ -52,21 +56,21 @@ def run_cmd(cmd):
 
 def rust_build():
     cmd = (
-        "cd rust; rm -r target; cargo rustc --release -- -Cprefer-dynamic"
+        "cd rust && rm -r target; cargo rustc --release -- -Cprefer-dynamic"
     )
     run_cmd(cmd)
 
 
 def cpp_build():
     cmd = (
-        "cd cpp; mkdir -p build; cd build; rm -rf * .*; cmake .. && make"
+        "cd cpp &&mkdir -p build && cd build && rm -rf * .*; cmake .. && make"
     )
     run_cmd(cmd)
 
 
 def rust_benchmark(benchmark, resfile, n_iter):
     cmd = (
-        f"cd rust; ./target/release/rust {benchmark} {resfile} {n_iter}"
+        f"cd rust && ./target/release/rust {benchmark} {resfile} {n_iter}"
     )
     run_cmd(cmd)
     return {
@@ -97,15 +101,21 @@ def run_benchmarks():
         print(item(str(bench)))
     for benchmark, resfile, n_iter in BENCHMARKS:
         print(msg(f"Running benchmark \"{benchmark}\" ..."))
-        print(item("[rust running]"))
+        print(item("[Rust running]"))
         rust_data = rust_benchmark(benchmark, resfile, n_iter)
-        print(item("[c++ running]"))
+        print(item("[C++ running]"))
         cpp_data = cpp_benchmark(benchmark, resfile, n_iter)
         res.append({
             "name": benchmark,
             "cpp": Benchmark(**cpp_data),
             "rust": Benchmark(**rust_data)
         })
+        ratio = np.mean(rust_data["runtime"]) / np.mean(cpp_data["runtime"])
+        winner = 'C++' if ratio > 1 else 'Rust'
+        loser = 'C++' if ratio <= 1 else 'Rust'
+        ratio = ratio if ratio > 1 else 1 / ratio
+        print(resmsg(f"{winner} wins: {ratio:.2f} times faster than {loser}!"))
+
     print(msg("End of benchmarks"))
     return res
 
