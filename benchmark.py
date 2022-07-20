@@ -59,7 +59,7 @@ def rust_build():
 
 def cpp_build():
     cmd = (
-        "cd cpp/build; rm -rf * .*; cmake .. && make"
+        "cd cpp; mkdir -p build; cd build; rm -rf * .*; cmake .. && make"
     )
     run_cmd(cmd)
 
