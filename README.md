@@ -35,7 +35,6 @@ Finally, add the benchmark in the `BENCHMARKS` variable of the `benchmark.py` fi
 ``` python
     BENCHMARKS = [
         ...,
-        ("benchmark_name", "benchmark_output_file_name", <n_iter(int)>)
+        "benchmark_name",
     ]
 ```
-with `n_iter` the number of iterations to repeat the benchmark.

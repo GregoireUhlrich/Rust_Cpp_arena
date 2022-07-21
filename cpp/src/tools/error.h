@@ -1,20 +1,24 @@
+#ifndef BCH_ERROR_H_INCLUDED
+#define BCH_ERROR_H_INCLUDED
+
 #include <exception>
 #include <string>
 
 namespace bch {
+
 class Error : public std::exception {
   public:
-    Error(std::string const &str) : msg(str)
+    Error(char const *str) : msg(str)
     {
     }
 
     char const *what() const noexcept
     {
-        return msg.c_str();
+        return msg;
     }
 
   private:
-    std::string msg;
+    char const *msg;
 };
 
 class IOError : public Error {
@@ -22,3 +26,5 @@ class IOError : public Error {
 };
 
 } // namespace bch
+
+#endif

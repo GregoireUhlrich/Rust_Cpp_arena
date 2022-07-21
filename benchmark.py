@@ -10,15 +10,24 @@ from dataclasses import dataclass
 N_ITER = 10
 
 
+BENCHMARKS_NAMES = [
+    "dictionnary",
+    "algebra",
+    "error",
+    "option",
+    "vector1",
+    "vector2",
+    "vector3",
+    "array",
+    "threads",
+    "memoization",
+    "algorithm",
+]
+
+
 BENCHMARKS = [
-    ("dictionnary", "dict.txt", N_ITER),
-    ("algebra", "algebra.txt", N_ITER),
-    ("vector1", "vec1.txt", N_ITER),
-    ("vector2", "vec2.txt", N_ITER),
-    ("vector3", "vec3.txt", N_ITER),
-    ("array", "array.txt", N_ITER),
-    ("threads", "thread.txt", N_ITER),
-    ("algorithm", "algo.txt", N_ITER),
+    (bench, f"{bench}.txt", N_ITER)
+    for bench in BENCHMARKS_NAMES
 ]
 
 
@@ -128,11 +137,6 @@ def plot_benchmarks(benchmarks):
         for data in benchmarks
         for el in [data["cpp"].runtime, data["rust"].runtime]
     ]
-    s = [
-        el
-        for data in benchmarks
-        for el in [data["cpp"].size, data["rust"].size]
-    ]
     labels = [
         data["name"]
         for data in benchmarks
@@ -144,9 +148,10 @@ def plot_benchmarks(benchmarks):
     label_size = 13
     ticks_size = 11
     n_plots = int(len(x) / 2)
-    row_size = int(np.ceil(n_plots / 2))
-    fig, axes = plt.subplots(2, row_size,
-                             figsize=(1.5*n_plots, 7))
+    row_size = 4
+    col_size = int(np.ceil(n_plots/row_size))
+    fig, axes = plt.subplots(col_size, row_size,
+                             figsize=(3.5*row_size, 2.5*col_size))
     for i in range(n_plots):
         ax = axes[int(i / row_size)][i % row_size]
         ax.set_title(r'$\mathrm{' + labels[i] + '}$', fontsize=title_size)
@@ -170,10 +175,17 @@ def plot_benchmarks(benchmarks):
         ax.tick_params(axis='y', which='minor', labelsize=ticks_size)
         if i % row_size == 0:
             ax.set_ylabel(r'Runtime $[\mathrm{ms}]$', fontsize=label_size)
-        ax.set_xticks([-1, 1])
-        ax.set_xticklabels(["cpp", "rust"], fontsize=label_size)
-        ax.tick_params(axis='x', which='major', labelsize=label_size)
-        ax.tick_params(axis='x', which='minor', labelsize=label_size)
+        if (
+                (int(i / row_size) == col_size - 1)
+                or (int(i / row_size) == col_size - 2
+                    and i + row_size >= n_plots)
+           ):
+            ax.set_xticks([-1, 1])
+            ax.set_xticklabels(["cpp", "rust"], fontsize=label_size)
+            ax.tick_params(axis='x', which='major', labelsize=label_size)
+            ax.tick_params(axis='x', which='minor', labelsize=label_size)
+    for j in range(i+1, row_size*col_size):
+        axes[int(j / row_size)][j % row_size].set_axis_off()
 
     plt.show()
 

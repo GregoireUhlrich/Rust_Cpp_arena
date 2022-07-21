@@ -11,6 +11,10 @@ set(BENCHMARK_SRC
     array.cpp
     threads.h
     threads.cpp
+    memoization.h
+    memoization.cpp
+    error.h
+    error.cpp
     algorithm.h
     algorithm.cpp
 )
