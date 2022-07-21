@@ -14,8 +14,7 @@ void benchmark_vector2()
     for (int i = 0; i != 500000; ++i) {
         vec1.push_back(Object{});
     }
-    auto vec2 = vec1;
-    assert(vec1.size() == vec2.size());
+    assert(vec1.size() == 500000);
 }
 void benchmark_vector3()
 {
@@ -24,8 +23,7 @@ void benchmark_vector3()
     for (int i = 0; i != 500000; ++i) {
         vec1.emplace_back();
     }
-    auto vec2 = vec1;
-    assert(vec1.size() == vec2.size());
+    assert(vec1.size() == 500000);
 }
 
 } // namespace bch

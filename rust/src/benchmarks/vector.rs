@@ -36,8 +36,7 @@ pub fn benchmark_vector2() -> ()
     for _i in 0..500000 {
         vec1.push(Object::default());
     }
-    let vec2 = vec1.clone();
-    assert!(vec1.len() == vec2.len());
+    assert!(vec1.len() == 500000);
 }
 
 pub fn benchmark_vector3() -> ()
@@ -47,6 +46,5 @@ pub fn benchmark_vector3() -> ()
     for _i in 0..500000 {
         vec1.push(Object::default());
     }
-    let vec2 = vec1.clone();
-    assert!(vec1.len() == vec2.len());
+    assert!(vec1.len() == 500000);
 }
