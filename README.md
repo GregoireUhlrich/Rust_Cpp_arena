@@ -20,7 +20,7 @@ Then, modify the `src/tools/config.rs` and `src/tools/config.cpp` files to add t
 ``` rust
     benchmarks: HashMap::from([
         ...,
-        ("benchmark_name", &benchmark_rust_func as &dyn Fn() -> ()),
+        ("benchmark_name", &benchmark_rust_func as &BenchmarkFunc),
     ])
 ```
 And the `cpp` counter-part:
